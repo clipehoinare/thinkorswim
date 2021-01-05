@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1BC10115-F101-4A73-85E4-93796B644B30}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{45C3AC59-3809-4B0D-A7DF-6294F2CC1245}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ConsoleQuotes</RootNamespace>
-    <AssemblyName>ConsoleQuotes</AssemblyName>
+    <RootNamespace>Library.ThinkOrSwim.Adapter</RootNamespace>
+    <AssemblyName>Library.ThinkOrSwim.Adapter</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,17 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Queue.cs" />
+    <Compile Include="Feed.cs" />
+    <Compile Include="IRDTUpdateEvent.cs" />
+    <Compile Include="IRTDServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ThinkOrSwim\Library.ThinkOrSwim.Adapter.csproj">
-      <Project>{45c3ac59-3809-4b0d-a7df-6294f2cc1245}</Project>
-      <Name>Library.ThinkOrSwim.Adapter</Name>
-    </ProjectReference>
+    <Compile Include="Quote.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Quotes.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

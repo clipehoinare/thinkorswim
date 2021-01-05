@@ -4,19 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ThinkOrSwim
+namespace Library.ThinkOrSwim.Adapter
 {
     public class Quote
     {
-        public string Symbol { get; protected set; }
-        public string Type { get; protected set; }
-        public double Value { get; protected set; }
+        double _value;
 
-        internal Quote(string symbol, string type, double value)
+        public int Id { get; protected set; }
+        public string Symbol { get; protected set; }
+        public string DataType { get; protected set; }
+        public int CounterId { get; protected set; }
+        public double Value { get { return _value; } set { _value = value; Updated = true; } }
+        public bool Updated { get; set; }
+
+        internal Quote(int id, string symbol, string dataType, int counterId, double value)
         {
+            this.Id = id;
             this.Symbol = symbol;
+            this.DataType = dataType;
+            this.CounterId = counterId;
             this.Value = value;
-            this.Type = type;
+            this.Updated = false;
+        }
+        public Quote(int id, string symbol, string dataType, int counterId)
+        {
+            this.Id = id;
+            this.Symbol = symbol;
+            this.DataType = dataType;
+            this.CounterId = counterId;
         }
     }
 }

@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.ThinkOrSwim.Adapter", "ThinkOrSwim\Library.ThinkOrSwim.Adapter.csproj", "{45C3AC59-3809-4B0D-A7DF-6294F2CC1245}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleQuotes", "ConsoleQuotes\ConsoleQuotes.csproj", "{1BC10115-F101-4A73-85E4-93796B644B30}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{25E5BBE8-AF0B-44D2-8E92-50DF14064666}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45C3AC59-3809-4B0D-A7DF-6294F2CC1245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45C3AC59-3809-4B0D-A7DF-6294F2CC1245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45C3AC59-3809-4B0D-A7DF-6294F2CC1245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45C3AC59-3809-4B0D-A7DF-6294F2CC1245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BC10115-F101-4A73-85E4-93796B644B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC10115-F101-4A73-85E4-93796B644B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC10115-F101-4A73-85E4-93796B644B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC10115-F101-4A73-85E4-93796B644B30}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F3DE92DE-2291-4365-AD97-DE9239E4112B}
+	EndGlobalSection
+EndGlobal

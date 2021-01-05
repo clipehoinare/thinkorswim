@@ -7,22 +7,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Security.Cryptography;
+using System.Threading;
 
-namespace ThinkOrSwim
+namespace Library.ThinkOrSwim.Adapter
 {
-    class Feed : IRTDUpdateEvent, IEnumerable<Quote>
+    class Feed : IRTDUpdateEvent, IEnumerable<Tuple<int, double>>
     {
         readonly string registryKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Tos.RTD\CLSID";
         IRTDServer server;
         Queue queue = new Queue();
-        Topics topics = new Topics();
+        int _count = 0;
 
-        internal Feed(int heartbeat)
+        internal Feed(int heartbeatInterval, int timeout)
         {
-            var rtd = Type.GetTypeFromCLSID(
-                new Guid(Registry.GetValue(registryKey, "", null).ToString()));
+            var rtd = Type.GetTypeFromCLSID(new Guid(Registry.GetValue(registryKey, "", null).ToString()));
             this.server = (IRTDServer)Activator.CreateInstance(rtd);
-            this.HeartbeatInterval = heartbeat;
+            this.HeartbeatInterval = heartbeatInterval;
+            this.queue.Timeout = timeout;
             this.server.ServerStart(this);
         }
 
@@ -31,28 +32,37 @@ namespace ThinkOrSwim
             this.server.ServerTerminate();
         }
 
-        internal void Add(string symbol, string type)
+        internal void Add(int id, string symbol, string type)
         {
             var objects = new object[] { type, symbol };
-            var id = getHash(symbol, type);
-            this.topics.Add(id, symbol, type);
+
             this.server.ConnectData(id, objects, true);
+            _count++;
         }
 
-        internal void Remove(string symbol, string type)
+        internal void Remove(int id)
         {
-            var id = getHash(symbol, type);
             this.server.DisconnectData(id);
+            _count--;
         }
 
-        Int16 getHash(string symbol, string type)
+        public bool TryTake(out Tuple<int, double> tuple)
         {
-            var value = string.Format("{0}:{1}", symbol, type);
-            using (var h = MD5.Create())
-            {
-                return Math.Abs(BitConverter.ToInt16(
-                    h.ComputeHash(Encoding.UTF8.GetBytes(value)), 0));
-            }
+            bool succesful;
+
+            succesful = this.queue.TryTake(out tuple);
+
+            return succesful;
+        }
+        public int CurrentCount
+        {
+            get { return _count; }
+        }
+        internal bool CheckHeartbeat()
+        {
+            long beat = this.server.Heartbeat();
+
+            return (beat > 0);
         }
 
         public int HeartbeatInterval
@@ -67,22 +77,23 @@ namespace ThinkOrSwim
 
         public void UpdateNotify()
         {
-            var refresh = server.RefreshData(this.topics.Count());
+            var refresh = server.RefreshData(_count);
             if (refresh.Length > 0)
             {
                 for (int i = 0; i < refresh.Length / 2; i++)
                 {
                     var id = (int)refresh[0, i];
-                    var data = this.topics.Get(id);
-                    this.queue.Push(new Quote(
-                        data.Item1,
-                        data.Item2, 
-                        double.Parse(refresh[1, i].ToString())));
+                    double value2;
+                    var converted = double.TryParse(refresh[1, i].ToString(), out value2);
+                    if (converted)
+                    {
+                        this.queue.Push(new Tuple<int, double>(id, value2));
+                    }
                 }
             }
         }
 
-        public IEnumerator<Quote> GetEnumerator()
+        public IEnumerator<Tuple<int, double>> GetEnumerator()
         {
             return this.queue;
         }

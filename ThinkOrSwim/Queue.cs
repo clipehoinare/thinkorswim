@@ -6,12 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ThinkOrSwim
+namespace Library.ThinkOrSwim.Adapter
 {
-    class Queue : IEnumerator, IEnumerator<Quote>
+    class Queue : IEnumerator, IEnumerator<Tuple<int, double>>
     {
-        BlockingCollection<Quote> queue = new BlockingCollection<Quote>(new ConcurrentQueue<Quote>());
-        Quote current;
+        public int Timeout { get; set; }  
+
+        BlockingCollection<Tuple<int, double>> bc = new BlockingCollection<Tuple<int, double>>(new ConcurrentQueue<Tuple<int, double>>());
+        Tuple<int, double> current;
 
         internal Queue()
         {
@@ -20,15 +22,15 @@ namespace ThinkOrSwim
 
         internal void Disconnect()
         {
-            this.queue.CompleteAdding();
+            this.bc.CompleteAdding();
         }
 
-        internal void Push(Quote quote)
+        internal void Push(Tuple<int, double> quote)
         {
-            this.queue.Add(quote);
+            this.bc.Add(quote);
         }
 
-        public Quote Current
+        public Tuple<int, double> Current
         {
             get
             {
@@ -46,17 +48,29 @@ namespace ThinkOrSwim
 
         public void Dispose()
         {
-            this.queue.Dispose();
+            this.bc.Dispose();
         }
 
         public bool MoveNext()
         {
-            if (this.queue.IsCompleted)
+            if (this.bc.IsCompleted)
             {
                 return false;
             }
-            this.current = this.queue.Take();
+            this.current = this.bc.Take();
             return true;
+        }
+
+        public bool TryTake(out Tuple<int, double> tuple)
+        {
+            bool succesful;
+
+            succesful = this.bc.TryTake(out tuple, timeout: TimeSpan.FromSeconds(Timeout));
+
+            if (succesful)
+                current = tuple;
+
+            return succesful;
         }
 
         public void Reset()
